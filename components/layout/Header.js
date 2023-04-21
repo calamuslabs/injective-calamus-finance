@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React, {useCallback, useEffect} from "react";
-// import NetworkSelection from "./NetworkSelection";
+import NetworkSelection from "./NetworkSelection";
 import {useRouter} from "next/router";
 import {titleMap} from "../../data/SidebarOption";
 import {useSelector} from "react-redux";
@@ -58,7 +58,7 @@ export default function Header({onOpen, title, setTitle, openSidebar, ...rest}) 
                         </Text>
                     </Button>
                     : null}
-                {/* <NetworkSelection/> */}
+                <NetworkSelection/>
 
             </HStack>
         </Flex>

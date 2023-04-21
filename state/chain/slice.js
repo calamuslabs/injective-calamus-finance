@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import connectToWallet from "./thunk/connectWallet";
+import connectToWallet from "./thunk/connectWallet";
+import { getAvailableTokens } from "./thunk/getTokens";
 
 const initialState = {
     isConnecting: false,
     selectedChain: "",
-    availableChains: ["injective"],
+    availableChains: ["inj"],
+    availableTokens: [],
     account: "",
     web3Loaded: false,
     infoLoaded: false,
@@ -28,15 +30,15 @@ export const slice = createSlice({
         },
     },
     extraReducers(builder) {
-        // builder.addCase(connectToWallet.fulfilled, (state, action) => {
-        //     if (action.payload.account) {
-        //         state.web3Loaded = true;
-        //     } else {
-        //         state.web3Loaded = false;
-        //     }
-        //     state.account = action.payload.account;
-        //     state.selectedChain = action.payload.chain;
-        // })
+        builder.addCase(connectToWallet.fulfilled, (state, action) => {
+            state.account = action.payload.account;
+            state.selectedChain = action.payload.chain;
+        })
+        builder.addCase(getAvailableTokens.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.availableTokens = action.payload;
+            }
+        })
     }
 })
 

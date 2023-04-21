@@ -12,6 +12,9 @@ export const slice = createSlice({
     name: 'hub',
     initialState,
     reducers: {
+        selectToken: (state, action) => {
+            state.selectedToken = action.payload;
+        },
     },
     // extraReducers(builder) {
     //     builder.addCase(loadContract.fulfilled, (state, action) => {
@@ -25,5 +28,6 @@ export const slice = createSlice({
 })
 
 export const {
+    selectToken
 } = slice.actions;
 export default slice.reducer;

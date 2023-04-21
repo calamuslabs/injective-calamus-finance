@@ -1,19 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { getKeplr } from "./connectInj";
 
 const connectToWallet = createAsyncThunk("wallet/connect", async (chain) => {
-    let connectResult = false;
-    let account = "";
-
-    // @ts-ignore
-    const allAccounts = await window.ethereum.request({ method: 'eth_accounts' });
-
-    if (allAccounts && allAccounts.length) {
-        console.log('Success!', 'Wallet Connected!', 'success')
-        account = allAccounts[0];
-    }
-
-    if (connectResult) {
-        return { chain: chain, account: account };
+    let result = await getKeplr();
+    if (result.accounts.length) {
+        return { chain: chain, account: result.accounts[0].address };
     } else {
         return { chain: chain, account: "" };
     }

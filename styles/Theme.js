@@ -278,7 +278,7 @@ const components = {
     },
     NetworkSelectName: {
         baseStyle: ({colorMode}) => ({
-            fontSize: "20px",
+            fontSize: "16px",
             fontWeight: '500',
             alignItems: 'center'
         })
@@ -287,6 +287,7 @@ const components = {
         baseStyle: ({colorMode}) => ({
             fontSize: "xs",
             color: "gray.600",
+            fontWeight: 600,
             marginTop: '0 !important',
             ml: 0
         })
