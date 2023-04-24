@@ -11,7 +11,10 @@ const initialState = {
     web3Loaded: false,
     infoLoaded: false,
     registered: false,
-    isInstalledMetamask: false
+    isInstalledMetamask: false,
+    keplrObj: {
+        loaded: false
+    }
 }
 
 export const slice = createSlice({
@@ -33,6 +36,9 @@ export const slice = createSlice({
         builder.addCase(connectToWallet.fulfilled, (state, action) => {
             state.account = action.payload.account;
             state.selectedChain = action.payload.chain;
+            if (state.account) {
+                state.keplrObj = { loaded: true, ...action.payload }
+            }
         })
         builder.addCase(getAvailableTokens.fulfilled, (state, action) => {
             if (action.payload) {

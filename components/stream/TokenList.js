@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Avatar,
     Text,
@@ -34,8 +35,8 @@ export default function TokenList() {
     const { isOpen, onToggle, onClose } = useDisclosure();
 
     const handleSelectToken = useCallback((value) => {
-        let filteredTokens = availableTokens.filter(tk => tk.denom === value);
-        dispatch(selectToken(filteredTokens.length ? filteredTokens[0] : availableTokens[0]));
+        let tokenIndex = availableTokens.findIndex(tk => tk.tokenId === value);
+        dispatch(selectToken(tokenIndex !== -1 ? availableTokens[tokenIndex] : availableTokens[0]));
         onClose();
     }, [availableTokens])
 
@@ -51,10 +52,10 @@ export default function TokenList() {
         }
     }, [account]);
     return (
-        <FormControl isRequired>
+        <FormControl>
             <FormLabel sx={formLabelStyle}>Select Token</FormLabel>
             <Popover
-                matchWidth
+                maxW={"100%"}
                 isOpen={isOpen}
                 onClose={onClose}
             >
@@ -64,12 +65,12 @@ export default function TokenList() {
                         aria-label='Options'
                         variant='outline'
                         onClick={onToggle}
-                        leftIcon={<Avatar sx={tokenLogoStyle} src={`https://testnet.explorer.injective.network/vendor/@injectivelabs/token-metadata/${selectedToken?.logo}`} name={selectedToken?.symbol} />}
+                        leftIcon={<Avatar sx={tokenLogoStyle} src={selectedToken?.tokenLogo} name={selectedToken?.tokenAbbr}/>}
                         rightIcon={<Image src={`/icons/Down_Button_Gray.svg`} width={'30'}
                             height={'30'}
                         />}
                     >
-                        <Text sx={formSelectTextStyle}>{(selectedToken && selectedToken?.name) ? selectedToken.name + ` (${selectedToken.symbol})` : ''}</Text>
+                        <Box sx={formSelectTextStyle}><Text w='min'>{(selectedToken && selectedToken?.name) ? selectedToken.name + ` (${selectedToken.tokenAbbr})` : ''}</Text></Box>
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent w='full'>
@@ -79,10 +80,10 @@ export default function TokenList() {
                                 availableTokens.map((token) =>
                                     <Button
                                         sx={formSelectStyle}
-                                        leftIcon={<Avatar sx={tokenLogoStyle} src={`https://testnet.explorer.injective.network/vendor/@injectivelabs/token-metadata/${token.logo}`} name={token.symbol} />}
-                                        onClick={() => {handleSelectToken(token.denom)}}
+                                        leftIcon={<Avatar sx={tokenLogoStyle} src={token.tokenLogo} name={token.tokenAbbr} />}
+                                        onClick={() => {handleSelectToken(token.tokenId)}}
                                         >
-                                        <Text sx={formSelectTextStyle}>{(token && token.name) ? token.name + ` (${token.symbol})` : ''}</Text>
+                                        <Text sx={formSelectTextStyle}>{(token && token.name) ? token.name + ` (${token.tokenAbbr})` : ''}</Text>
                                     </Button>) :
                                 <Text>No token available</Text>
                             }

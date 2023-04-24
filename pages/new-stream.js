@@ -9,15 +9,14 @@ import {
 } from "@chakra-ui/react";
 
 import TokenList from "components/stream/TokenList";
-// import General from "components/stream/General";
-// import Additional from "components/stream/Additional";
-// import Summary from "components/stream/Summary";
-// import SaveBar from "components/stream/SaveBar";
+import General from "components/stream/General";
+import Summary from "components/stream/Summary";
+import SaveBar from "components/stream/SaveBar";
 import ProgressModal from "components/stream/ProgressModal";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-// import { setToastActive, updateInitialRelease } from "app/stream/slice";
-// import Balance from "components/stream/Balance";
+import { setToastActive } from "state/stream/slice";
+import Balance from "components/stream/Balance";
 
 export default function NewStream() {
     const router = useRouter();
@@ -31,9 +30,9 @@ export default function NewStream() {
     const toast = useToast()
 
     const { toastActive, toastMessage, toastStatus } = useSelector((state) => state.stream)
-    // const toggleToast = useCallback(() => {
-    //     dispatch(setToastActive(false))
-    // }, [])
+    const toggleToast = useCallback(() => {
+        dispatch(setToastActive(false))
+    }, [])
 
     useEffect(() => {
         if (toastActive) {
@@ -50,22 +49,19 @@ export default function NewStream() {
     return (
         <SimpleGrid sx={formContainerStyle}>
             <VStack  sx={formDataStyle}>
-                <VStack>
-                    <Text sx={formTitleStyle}>Stream Infomation</Text>      
-                    <VStack sx={formMainStyle} gap={2} >
-                        <TokenList />
-                        {/* <General /> */}
-                    </VStack>
-                    {/* <Additional /> */}
+                <Text sx={formTitleStyle}>Stream Infomation</Text>      
+                <VStack sx={formMainStyle} gap={2} >
+                    <TokenList />
+                    <General />
                 </VStack>
             </VStack>
             <Box>
                 <VStack sx={formSummaryStyle}>
-                    {/* <Balance />
-                    <Summary /> */}
+                    <Balance />
+                    <Summary />
                 </VStack>
             </Box>
-            {/* <SaveBar /> */}
+            <SaveBar />
             <ProgressModal router={router}/>
         </SimpleGrid>
     )

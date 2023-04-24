@@ -4,7 +4,7 @@ import { getKeplr } from "./connectInj";
 const connectToWallet = createAsyncThunk("wallet/connect", async (chain) => {
     let result = await getKeplr();
     if (result.accounts.length) {
-        return { chain: chain, account: result.accounts[0].address };
+        return { chain: chain, account: result.accounts[0].address, ...result };
     } else {
         return { chain: chain, account: "" };
     }

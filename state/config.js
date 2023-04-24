@@ -1,3 +1,5 @@
+import { ChainId } from '@injectivelabs/ts-types'
+
 export const config = {
     "calamus": {
         rpcAddress: "http://localhost:8545",
@@ -14,6 +16,9 @@ export const config = {
         contractAddress: "",
     },
 }
+
+export const InjChainId = process.env.NEXT_PUBLIC_NETWORK_ENVIRONMENT === 'main' ? ChainId.Mainnet : ChainId.Testnet;
+export const InjCalamus = process.env.NEXT_PUBLIC_NETWORK_ENVIRONMENT === 'main' ? ChainId.Mainnet : ChainId.Testnet;
 
 export const chainInfos = {
     "inj": {label: "Injective", logo: "/injective.png", disabled: false, wallets: ["metamask"]},

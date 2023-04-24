@@ -33,9 +33,8 @@ export default function NetworkSelection() {
     const handleConnectNetwork = useCallback(async (chain) => {
         dispatch(setIsConnecting(true));
         await dispatch(connectToWallet(chain));
-        await dispatch(getAvailableTokens());
         dispatch(setIsConnecting(false));
-        router.reload;
+        router.reload();
     }, [router])
 
     const networkSelectContainerStyle = useStyleConfig('NetworkSelectContainer');

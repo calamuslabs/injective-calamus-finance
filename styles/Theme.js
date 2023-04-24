@@ -347,10 +347,10 @@ const components = {
     },
     FormData: {
         baseStyle: ({colorMode}) => ({
+            w: 'full',
             alignItems: 'left',
             borderRadius: '12px',
             bg: 'white',
-            minW: 'min',
             px: {
                 md: 8,
                 lg: 16,
