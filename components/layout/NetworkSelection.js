@@ -21,23 +21,25 @@ import { chainInfos } from "state/config";
 import { useRouter } from "next/router";
 import Image from 'next/image'
 import { shortenAddress } from 'helper/address';
-import { getAvailableTokens } from 'state/chain/thunk/getTokens';
-
 
 export default function NetworkSelection() {
     const router = useRouter();
     const dispatch = useDispatch();
     const { isConnecting, selectedChain } = useSelector(state => state.chain);
+    const { loaded } = useSelector(state => state.wallet);
     const chain = useSelector(state => state.chain);
 
     const handleConnectNetwork = useCallback(async (chain) => {
         dispatch(setIsConnecting(true));
         await dispatch(connectToWallet(chain));
         dispatch(setIsConnecting(false));
-        router.reload();
-    }, [router])
+    }, [])
 
-    const networkSelectContainerStyle = useStyleConfig('NetworkSelectContainer');
+    useEffect(() => {
+        if (!loaded && selectedChain) {
+            handleConnectNetwork(selectedChain)
+        }
+    }, [loaded, selectedChain])
     const networkSelectButtonStyle = useStyleConfig('NetworkSelectButton');
     const networkSelectInfoStyle = useStyleConfig('NetworkSelectInfo');
     const networkSelectNameStyle = useStyleConfig('NetworkSelectName');

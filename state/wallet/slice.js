@@ -1,17 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import connectToWallet from "./thunk/connectWallet";
-import { getAvailableTokens } from "./thunk/getTokens";
-
+import connectToWallet from "state/chain/thunk/connectWallet";
+import { DenomClient } from "@injectivelabs/sdk-ts";
+import { InjNetwork } from "state/config";
 const initialState = {
-    isConnecting: false,
-    selectedChain: "",
-    availableChains: ["inj"],
-    availableTokens: [],
-    account: "",
-    web3Loaded: false,
-    infoLoaded: false,
-    registered: false,
-    isInstalledMetamask: false,
+    loaded: false,
+    keplrObj: {},
+    denomClient: new DenomClient(InjNetwork)
 }
 
 export const slice = createSlice({
@@ -31,12 +25,9 @@ export const slice = createSlice({
     },
     extraReducers(builder) {
         builder.addCase(connectToWallet.fulfilled, (state, action) => {
-            state.account = action.payload.account;
-            state.selectedChain = action.payload.chain;
-        })
-        builder.addCase(getAvailableTokens.fulfilled, (state, action) => {
-            if (action.payload) {
-                state.availableTokens = action.payload;
+            if (action.payload.account) {
+                state.loaded = true;
+                state.keplrObj = action.payload.strategy;
             }
         })
     }

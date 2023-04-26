@@ -27,8 +27,8 @@ pub enum ContractError {
     #[error("Wrong fund coin (expected: {expected}, got: {got})")]
     WrongFundCoin { expected: String, got: String },
 
-    #[error("Address already voted project")]
-    AddressAlreadyVotedProject {},
+    #[error("Not time for action")]
+    NotTime {},
 
     #[error("CLR algorithm requires a budget constrain")]
     CLRConstrainRequired {},

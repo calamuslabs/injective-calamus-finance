@@ -931,7 +931,7 @@ const components = {
     IncomingStreamPageContainer: {
         baseStyle: ({colorMode}) => ({
             gridTemplateRows: 'repeat(1, 1fr)',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 6
         })
     },

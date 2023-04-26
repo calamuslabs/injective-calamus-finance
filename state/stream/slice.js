@@ -1,6 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
 import moment from "moment";
 import { getAvailableTokens } from "state/chain/thunk/getTokens";
+import createStream from "./thunk/create";
+import { validateRecipientAmount, validateStartTime, validateStopTime } from "helper/validate";
+import cancelStream from "./thunk/cancel";
+import withdrawStream from "./thunk/withdraw";
 let now = moment();
 
 const initialState = {
@@ -95,6 +99,47 @@ export const slice = createSlice({
                 state.selectedToken =  action.payload[0];
             }
         });
+        builder.addCase(createStream.pending, (state) => {
+            state.isCreating = true;
+            state.formError.recipient_amount = validateRecipientAmount(parseFloat(state.formData.recipient.release_amount));
+            state.formError.start_time = validateStartTime(state.formData.start_time);
+            state.formError.stop_time = validateStopTime(state.formData.start_time, state.formData.stop_time);
+        });
+        builder.addCase(createStream.fulfilled, (state, action) => {
+            let message = action.payload.message;
+            state.toastActive = true;
+            state.toastMessage = message
+            state.isCreating = false; 
+            state.completeAction = true;
+            if(action.payload.result) {
+                state.selectedToken = initialState.selectedToken;
+                state.toastStatus = "success";
+            } else {
+                state.toastStatus = "error";
+            }
+        });
+        builder.addCase(cancelStream.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.toastActive = true;
+                state.toastMessage = transactionMsg;
+                state.toastStatus = "success";
+            } else {
+                state.toastActive = true;
+                state.toastMessage = "Fail to cancel stream";
+                state.toastStatus = "error";
+            }
+            state.isCancelling = false;
+            state.completeAction = true;
+        })
+        builder.addCase(withdrawStream.fulfilled, (state, action) => {
+            let message = action.payload.message;
+            state.toastActive = true;
+            state.toastMessage = message;
+            state.isWithdrawing = false;
+            state.completeAction = true;
+            state.toastStatus = action.payload.result ? "success" : "error";
+        })
+
     }
 
 })

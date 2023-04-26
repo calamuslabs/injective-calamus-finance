@@ -55,6 +55,7 @@ export default function TokenList() {
         <FormControl>
             <FormLabel sx={formLabelStyle}>Select Token</FormLabel>
             <Popover
+                matchWidth
                 maxW={"100%"}
                 isOpen={isOpen}
                 onClose={onClose}
@@ -70,7 +71,7 @@ export default function TokenList() {
                             height={'30'}
                         />}
                     >
-                        <Box sx={formSelectTextStyle}><Text w='min'>{(selectedToken && selectedToken?.name) ? selectedToken.name + ` (${selectedToken.tokenAbbr})` : ''}</Text></Box>
+                        <Text sx={formSelectTextStyle}>{(selectedToken && selectedToken?.name) ? selectedToken.name + ` (${selectedToken.tokenAbbr})` : ''}</Text>
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent w='full'>

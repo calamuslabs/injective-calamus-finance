@@ -1,27 +1,22 @@
 import React, { useCallback, useEffect } from "react";
-import StreamsFilter from "src/components/list/StreamsFilter";
-import { useAppDispatch, useAppSelector } from "src/app/hooks";
-import { getTronStreams } from "../app/list/tron/getOutgoingStreamsAsyncThunk";
-import { loadSmartContract } from "../app/chain/loadSmartContractAsyncThunk";
-import { setToastActive } from "../app/stream/streamSlice";
-import { resetStreams } from "../app/list/outgoingSlice";;
-import { initialOutgoing, setOutgingColumns } from "src/app/chain/chainSlice";
-import ColumnSelection from "src/components/list/ColumnSelection";
-import StreamTable from "src/components/list/StreamTable";
-import {Grid, GridItem, useToast, useStyleConfig, Box, HStack, Icon, Text} from "@chakra-ui/react";
-import EmptyData from "../components/list/EmptyData";
-import Loading from "../components/layout/Loading";
-import {BsInfoCircleFill} from "react-icons/bs";
-import {getEVMStreams} from "../app/list/evm/getEVMOutgoingAsyncThunk";
+import StreamsFilter from "components/list/StreamsFilter";
+import { setToastActive } from "state/stream/slice";
+import { resetStreams } from "state/outgoing/slice";;
+import StreamTable from "components/list/StreamTable";
+import { Grid, GridItem, useToast, useStyleConfig, Box, HStack, Icon, Text } from "@chakra-ui/react";
+import EmptyData from "components/list/EmptyData";
+import Loading from "components/layout/Loading";
+import { BsInfoCircleFill } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { getStreams } from "state/outgoing/thunk/getStreams";
 
 export default function OutgoingStream() {
-    const dispatch = useAppDispatch();
-    const outgoingStreams = useAppSelector((state) => state.outgoingStreams.filteredStreams);
-    const loading = useAppSelector((state) => state.outgoingStreams.loading);
-    const chainState = useAppSelector((state) => state.chain);
-    const selectedColumns = chainState.outgoing.filter(item => item.active).map(fItem => fItem.value);
+    const dispatch = useDispatch();
+    const outgoingStreams = useSelector((state) => state.outgoing.filteredStreams);
+    const loading = useSelector((state) => state.outgoing.loading);
+    const chainState = useSelector((state) => state.chain);
 
-    const {toastActive, toastMessage, toastStatus} = useAppSelector((state) => state.stream)
+    const { toastActive, toastMessage, toastStatus } = useSelector((state) => state.stream)
     const toast = useToast();
     const toggleToast = useCallback(() => {
         dispatch(setToastActive(false))
@@ -49,7 +44,7 @@ export default function OutgoingStream() {
                         minW: '200px'
                     }}>
                         <HStack>
-                            <Icon as={BsInfoCircleFill} color={'white'}/>
+                            <Icon as={BsInfoCircleFill} color={'white'} />
                             <Box w={'100%'}>
                                 <Text>{toastMessage}</Text>
                             </Box>
@@ -59,34 +54,13 @@ export default function OutgoingStream() {
         }
     }, [toastActive, toastMessage])
     async function fetchData() {
-        const { selectedChain } = chainState;
         dispatch(resetStreams())
-        await dispatch(loadSmartContract(selectedChain));
-        switch (selectedChain) {
-            case "tron":
-                dispatch(getTronStreams());
-                break;
-            default:
-                dispatch(getEVMStreams());
-                break;
-        }
+        dispatch(getStreams());
     }
-
-
-    const handleSelectedChange = useCallback((value) => {
-        const newColumn = selectedColumns;
-        const selectColumnIndex = newColumn.indexOf(value);
-        if (selectColumnIndex !== -1) {
-            newColumn.splice(selectColumnIndex, 1);
-        } else {
-            newColumn.push(value);
-        }
-        dispatch(setOutgingColumns(newColumn))
-    }, []);
 
     useEffect(() => {
         fetchData();
-    }, [chainState.currentAccount]);
+    }, [chainState.account]);
 
     const incomingStreamPageContainerStyle = useStyleConfig('IncomingStreamPageContainer');
     return (
@@ -94,19 +68,13 @@ export default function OutgoingStream() {
             <GridItem rowSpan={1} colSpan={{ base: 4, md: 3 }}>
                 <StreamsFilter isOutgoingStreams={true} />
             </GridItem>
-            <GridItem rowSpan={1} colSpan={{ base: 4, md: 1 }}>
-                <ColumnSelection selected={selectedColumns} handleChange={handleSelectedChange}
-                    choices={initialOutgoing} />
-            </GridItem>
             <GridItem rowSpan={1} colSpan={4}>
                 {loading ? <Loading /> : (outgoingStreams.length ?
                     <StreamTable
-                        currentAccount={chainState.currentAccount}
+                        account={chainState.account}
                         streams={outgoingStreams}
-                        selected={selectedColumns}
                         isIncoming={false} /> :
                     <EmptyData data={'outgoing streams'} />)}
-
             </GridItem>
         </Grid>
     )

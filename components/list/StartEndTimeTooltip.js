@@ -1,14 +1,8 @@
 import {Box, HStack, Text, Tooltip, useStyleConfig, VStack} from "@chakra-ui/react";
-import {ReactNode, useCallback} from "react";
+import {useCallback} from "react";
 import Image from "next/image";
 
-interface TimeTooltipProps {
-    readonly startTime: number,
-    readonly endTime: number,
-    children: ReactNode
-}
-
-export default function StartEndTimeTooltip({startTime, endTime, children}: TimeTooltipProps) {
+export default function StartEndTimeTooltip({startTime, endTime, children}) {
     const dateTimeColumnTextStyle = useStyleConfig('DateTimeColumnText');
     const networkSelectIdStyle = useStyleConfig('NetworkSelectId');
     const tooltipDatetimeTitleStyle = useStyleConfig('TooltipDatetimeTitle');

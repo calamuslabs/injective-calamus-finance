@@ -1,0 +1,1 @@
+74e569052dc70fa7eb3491499f8c73b4ddb1aa3e81431164c87c7cececebd2d0  ./target/wasm32-unknown-unknown/release/inject_cash.wasm

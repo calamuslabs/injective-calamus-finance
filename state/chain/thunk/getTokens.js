@@ -1,14 +1,16 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import { ChainRestBankApi, DenomClient } from '@injectivelabs/sdk-ts'
 import { getNetworkEndpoints, Network } from '@injectivelabs/networks'
+import { InjNetwork } from "state/config";
 
 export const getAvailableTokens = createAsyncThunk("wallet/availableToken", async (_payload, {getState}) => {
     let tokens = [];
-    let account = await getState().chain.account;
-    console.log("hello")
+    let state = await getState();
+    let account = state.chain.account;
     if (account) {
-        const endpoints = getNetworkEndpoints(Network.TestnetK8s)
-        const denomClient = new DenomClient(Network.TestnetK8s)
+        let denomClient = state.wallet.denomClient;
+
+        const endpoints = getNetworkEndpoints(InjNetwork)
         const chainBankApi = new ChainRestBankApi(endpoints.rest)
 
         const accountBalance = await chainBankApi.fetchBalances(account);
@@ -32,6 +34,5 @@ export const getAvailableTokens = createAsyncThunk("wallet/availableToken", asyn
             }
         })
     }
-    console.log(tokens)
     return tokens;
 })

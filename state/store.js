@@ -5,6 +5,9 @@ import storage from 'redux-persist/lib/storage';
 // import cacheReducer from "./cache/slice";
 import chainReducer from "./chain/slice";
 import streamReducer from "./stream/slice";
+import walletReducer from "./wallet/slice";
+import incomingReducer from "./incoming/slice";
+import outgoingReducer from "./outgoing/slice";
 
 const chainPersistConfig = {
     key: 'chain',
@@ -17,6 +20,9 @@ export const store = configureStore({
     reducer: {
         chain: chainPersist,
         stream: streamReducer,
+        wallet: walletReducer,
+        incoming: incomingReducer,
+        outgoing: outgoingReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

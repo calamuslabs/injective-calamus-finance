@@ -1,16 +1,24 @@
 use crate::state::Stream;
 use cosmwasm_schema::{cw_serde, QueryResponses};
+use cosmwasm_std::Uint128;
 
 #[cw_serde]
 pub enum ExecuteMsg {
     Create {
         recipient: String,
-        start_time: u64,
-        duration: u64,
-        vesting_release: u128
+        start_time: Uint128,
+        duration: Uint128,
+        vesting_release: Uint128
     },
     Cancel {
         cancel_id: u64,
+    },
+    Transfer {
+        transfer_id: u64,
+        new_recipient: String
+    },
+    Topup {
+        topup_id: u64
     },
     Withdraw {
         withdraw_id: u64,
