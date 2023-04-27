@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Crypto streaming on Injective chain
+Calamus Finance is a protocol for streaming cryptocurrency that operates in a decentralized manner, enabling individuals to make payments and receive them at any given time, while also facilitating automatic token vesting.
 
-## Getting Started
+The reason for selecting Injective is its all-encompassing nature within the Cosmos Ecosystem, which enables us to save time on research and development and concentrate more on feature development.
+# Features
+### Main features
+- **Payroll**: Pay your employees by the second quickly. Company will have complete control over frequency, liquidity amount and duration. Cancellation is possible at any time by the payer and/or payee.
+- **Token Vesting**: Reward your team, advisors and investors with tokens automatically without any fear of foul-play
+# Technologies Used
+- **CosmWasm**: To develop smart contracts
+- InjectiveLabs SDK
+- InjectiveLabs Wallet API
+- NextJS 12
+- Charka UI components
+- React 17 & React-Redux
 
-First, run the development server:
+# Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Prior to beginning, it is necessary to install [Rust](https://www.rust-lang.org/tools/install) and [NodeJS](https://nodejs.org/ro).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Deploy smart contracts
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Deploy dApp
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+# Smart Contracts
 
-To learn more about Next.js, take a look at the following resources:
+# Testing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Copyright © 2023 Shopify. See [LICENSE](LICENSE.md) for further details.
