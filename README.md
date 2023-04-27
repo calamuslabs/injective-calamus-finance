@@ -7,7 +7,7 @@ The reason for selecting Injective is its all-encompassing nature within the Cos
 - **Payroll**: Pay your employees by the second quickly. Company will have complete control over frequency, liquidity amount and duration. Cancellation is possible at any time by the payer and/or payee.
 - **Token Vesting**: Reward your team, advisors and investors with tokens automatically without any fear of foul-play
 
-# Technologies Used
+# Technologies
 - **CosmWasm**: To develop smart contracts
 - InjectiveLabs SDK
 - InjectiveLabs Wallet API
@@ -38,9 +38,11 @@ Our main smart contract is [here](https://testnet.explorer.injective.network/con
 
 ![](docs/WithdrawProccess.jpg)
 
-### Topup 
+### Top-up process 
+![](docs/TopupProcess.jpg)
 
 ### Cancel
+![](docs/CancelProcess.jpg)
 
 ### Transfer
 
