@@ -79,7 +79,7 @@ export default function StreamsFilter({ isOutgoingStreams }) {
         <Grid sx={streamFilterContainerStyle}>
             <GridItem rowSpan={1} colSpan={{ base: 3, md: 1 }} sx={filterItemContainerStyle}>
                 <InputGroup>
-                    <InputLeftElement children={<Image alt={'search icon'} src={'/icons/Search.svg'} width={30} height={30} />} />
+                    <InputLeftElement ><Image alt={'search icon'} src={'/icons/Search.svg'} width={30} height={30} /></InputLeftElement>
                     <Input placeholder='Search' onChange={handleTextSearchValueChange} />
                 </InputGroup>
             </GridItem>

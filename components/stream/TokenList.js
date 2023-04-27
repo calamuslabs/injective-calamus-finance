@@ -83,6 +83,7 @@ export default function TokenList() {
                                         sx={formSelectStyle}
                                         leftIcon={<Avatar sx={tokenLogoStyle} src={token.tokenLogo} name={token.tokenAbbr} />}
                                         onClick={() => {handleSelectToken(token.tokenId)}}
+                                        key={`token-${token.tokenId}`}
                                         >
                                         <Text sx={formSelectTextStyle}>{(token && token.name) ? token.name + ` (${token.tokenAbbr})` : ''}</Text>
                                     </Button>) :
