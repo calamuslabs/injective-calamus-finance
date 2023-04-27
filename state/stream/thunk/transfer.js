@@ -5,8 +5,9 @@ import {
     MsgExecuteContract
 } from '@injectivelabs/sdk-ts'
 import { config } from "state/config";
-import { BigNumber } from "@injectivelabs/utils"
-const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getState }) => {
+import { BigNumber } from '@injectivelabs/utils'
+
+const transferStream = createAsyncThunk("stream/transfer", async (payload, { getState }) => {
     let state = await getState();
 
     try {
@@ -16,6 +17,7 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
             walletStrategy: keplrObj,
             network: InjNetwork,
         })
+
         const msg = MsgExecuteContract.fromJSON({
             funds: {
                 denom: 'inj',
@@ -25,9 +27,10 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
             contractAddress: config.inj.contractAddress,
             exec: {
                 msg: {
-                    cancel_id: streamId
+                    transfer_id: payload.streamId,
+                    new_recipient: payload.newRecipient
                 },
-                action: "cancel"
+                action: "transfer"
             }
         });
         await msgBroadcastClient.broadcast({
@@ -37,7 +40,7 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
         return {
             result: true,
             type: "stream",
-            message: "Cancel stream success",
+            message: "Withdraw stream success",
             fieldErr: ""
         }
     } catch (e) {
@@ -45,10 +48,11 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
         let errMsg = e.message.length > 100 ? e.message.slice(0, 100) + "..." + " (See detail in console)" : e.message;
         return {
             result: false,
-            type: "cancel",
+            type: "withdraw",
             message: errMsg,
             fieldErr: ""
         }
     }
+
 })
-export default cancelStream;
+export default transferStream;

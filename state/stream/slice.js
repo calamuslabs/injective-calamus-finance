@@ -5,6 +5,7 @@ import createStream from "./thunk/create";
 import { validateRecipientAmount, validateStartTime, validateStopTime } from "helper/validate";
 import cancelStream from "./thunk/cancel";
 import withdrawStream from "./thunk/withdraw";
+import topupStream from "./thunk/topup";
 let now = moment();
 
 const initialState = {
@@ -12,8 +13,8 @@ const initialState = {
     selectedToken: null,
     formData: {
         release_amount: "0",
-        start_time: (now.add(1, "hours").unix() * 1000).toString(),
-        stop_time: (now.add(1, "minutes").unix() * 1000).toString(),
+        start_time: (now.add(2, "minutes").unix() * 1000).toString(),
+        stop_time: (now.add(20, "seconds").unix() * 1000).toString(),
         vesting_release: "0",
         recipient: "",
         can_submit: false
@@ -28,11 +29,12 @@ const initialState = {
     isCancelling: false,
     isTransferring: false,
     isWithdrawing: false,
+    isTopuping: false,
     toastMessage: "",
     toastActive: false,
     toastStatus: "success",
     completeAction: false,
-    pendingTransaction: false
+    isRedirect: false
 }
 
 const transactionMsg = "Transaction signed successfully. Please reload when transaction is confirmed on-chain.";
@@ -53,19 +55,6 @@ export const slice = createSlice({
         },
         updateError: (state, action) => {
             state.formError[action.payload.key] = action.payload.value;
-        },
-        setIsCreating: (state, action) => {
-            console.log("Change State status");
-            state.isCreating = action.payload;
-        },
-        setIsCancelling: (state, action) => {
-            state.isCancelling = action.payload;
-        },
-        setIsTransferring: (state, action) => {
-            state.isTransferring = action.payload;
-        },
-        setIsWithdrawing: (state, action) => {
-            state.isWithdrawing = action.payload;
         },
         setToastActive: (state, action) => {
             state.toastActive = action.payload;
@@ -92,6 +81,9 @@ export const slice = createSlice({
         setCanSubmit: (state, action) => {
             state.formData.can_submit = action.payload;
         },
+        triggerRedirect: (state, _action) => {
+            state.isRedirect = false;
+        },
     },
     extraReducers(builder) {
         builder.addCase(getAvailableTokens.fulfilled, (state, action) => {
@@ -112,12 +104,15 @@ export const slice = createSlice({
             state.isCreating = false; 
             state.completeAction = true;
             if(action.payload.result) {
-                state.selectedToken = initialState.selectedToken;
                 state.toastStatus = "success";
+                state.isRedirect = true;
             } else {
                 state.toastStatus = "error";
             }
         });
+        builder.addCase(cancelStream.pending, (state) => {
+            state.isCancelling = true;
+        })
         builder.addCase(cancelStream.fulfilled, (state, action) => {
             if (action.payload) {
                 state.toastActive = true;
@@ -131,6 +126,9 @@ export const slice = createSlice({
             state.isCancelling = false;
             state.completeAction = true;
         })
+        builder.addCase(withdrawStream.pending, (state) => {
+            state.isWithdrawing = true;
+        })
         builder.addCase(withdrawStream.fulfilled, (state, action) => {
             let message = action.payload.message;
             state.toastActive = true;
@@ -139,7 +137,17 @@ export const slice = createSlice({
             state.completeAction = true;
             state.toastStatus = action.payload.result ? "success" : "error";
         })
-
+        builder.addCase(topupStream.pending, (state) => {
+            state.isTopuping = true;
+        })
+        builder.addCase(topupStream.fulfilled, (state, action) => {
+            let message = action.payload.message;
+            state.toastActive = true;
+            state.toastMessage = message;
+            state.isTopuping = false;
+            state.completeAction = true;
+            state.toastStatus = action.payload.result ? "success" : "error";
+        })
     }
 
 })
@@ -147,15 +155,12 @@ export const slice = createSlice({
 export const {
     selectToken,
     updateState,
-    setIsCreating,
-    setIsCancelling,
-    setIsTransferring,
-    setIsWithdrawing,
     setToastActive,
     setCompleteAction,
     updateInitialRelease,
     resetFormData,
     updateError,
-    setCanSubmit
+    setCanSubmit,
+    triggerRedirect
 } = slice.actions;
 export default slice.reducer;

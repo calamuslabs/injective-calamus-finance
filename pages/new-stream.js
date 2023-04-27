@@ -12,10 +12,9 @@ import TokenList from "components/stream/TokenList";
 import General from "components/stream/General";
 import Summary from "components/stream/Summary";
 import SaveBar from "components/stream/SaveBar";
-import ProgressModal from "components/stream/ProgressModal";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { setToastActive } from "state/stream/slice";
+import { setToastActive, triggerRedirect } from "state/stream/slice";
 import Balance from "components/stream/Balance";
 
 export default function NewStream() {
@@ -29,7 +28,7 @@ export default function NewStream() {
     const formTitleStyle = useStyleConfig("SectionTitle");
     const toast = useToast()
 
-    const { toastActive, toastMessage, toastStatus } = useSelector((state) => state.stream)
+    const { toastActive, toastMessage, toastStatus, isRedirect } = useSelector((state) => state.stream)
     const toggleToast = useCallback(() => {
         dispatch(setToastActive(false))
     }, [])
@@ -45,6 +44,13 @@ export default function NewStream() {
               })
         }
     }, [toastActive, toastMessage])
+
+    useEffect(() => {
+        if (isRedirect) {
+            dispatch(triggerRedirect())
+            setTimeout(() => router.push("outgoing-stream"), 2000)
+        }
+    }, [isRedirect]);
 
     return (
         <SimpleGrid sx={formContainerStyle}>
@@ -62,7 +68,6 @@ export default function NewStream() {
                 </VStack>
             </Box>
             <SaveBar />
-            <ProgressModal router={router}/>
         </SimpleGrid>
     )
 }

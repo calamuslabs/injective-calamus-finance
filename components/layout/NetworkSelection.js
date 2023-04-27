@@ -3,7 +3,7 @@ import {
     VStack,
     Text,
     MenuList,
-    useColorModeValue,
+    Icon,
     MenuItem,
     MenuDivider,
     Menu,
@@ -21,6 +21,8 @@ import { chainInfos } from "state/config";
 import { useRouter } from "next/router";
 import Image from 'next/image'
 import { shortenAddress } from 'helper/address';
+import { disconnectNetwork } from 'state/chain/slice';
+import { MdOutlineExitToApp } from "react-icons/md";
 
 export default function NetworkSelection() {
     const router = useRouter();
@@ -35,6 +37,9 @@ export default function NetworkSelection() {
         dispatch(setIsConnecting(false));
     }, [])
 
+    const handleDisconnect = useCallback(async () => {
+        dispatch(disconnectNetwork())
+    }, [])
     useEffect(() => {
         if (!loaded && selectedChain) {
             handleConnectNetwork(selectedChain)
@@ -88,6 +93,20 @@ export default function NetworkSelection() {
                             {value.label}
                         </MenuItem>
                     )}
+                    {selectedChain && <MenuDivider />}
+                    {selectedChain && 
+                        <MenuItem as={Button}
+                            onClick={() => handleDisconnect()}
+                            leftIcon={<Icon as={MdOutlineExitToApp} />}
+                            justifyContent='left'
+                            key={`menu-disconnect`}
+                            colorScheme='red'
+                            bgColor='red.400'
+                            color='whiteAlpha'
+                        >
+                            Disconnect
+                        </MenuItem>
+                    }
                 </MenuList>
             </Menu>
         </>

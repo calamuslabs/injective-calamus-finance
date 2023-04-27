@@ -21,7 +21,7 @@ const withdrawStream = createAsyncThunk("stream/withdraw", async (streamId, { ge
         const msg = MsgExecuteContract.fromJSON({
             funds: {
                 denom: 'inj',
-                amount: new BigNumber(0).toFixed()
+                amount: new BigNumber(1).toFixed()
             },
             sender: injectiveAddress,
             contractAddress: config.inj.contractAddress,

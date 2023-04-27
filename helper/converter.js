@@ -32,7 +32,7 @@ export const convertStreams = async (denomClient, streams) => {
                 case 'initial':
                     statusCode = 1
                     break;
-                case 'complete':
+                case 'completed':
                     statusCode = 3
                     break;
                 case 'cancelled':
@@ -50,7 +50,7 @@ export const convertStreams = async (denomClient, streams) => {
                 }
             }
             let tokenDetail = tokenKeyMap.get(stream.release_amount.denom);
-            let decimal =  tokenDetail.decimal;
+            let decimal =  tokenDetail.decimals;
             let convertedReleaseAmount = parseFloat(ethers.utils.formatUnits(BigNumber.from(stream.release_amount.amount), decimal));
             let convertedRemainingAmount = parseFloat(ethers.utils.formatUnits(BigNumber.from(stream.remaining_amount, decimal)));
             let convertedVestingAmount = parseFloat(ethers.utils.formatUnits(BigNumber.from(stream.vesting_amount, decimal)));

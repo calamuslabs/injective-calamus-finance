@@ -5,8 +5,9 @@ import {
     MsgExecuteContract
 } from '@injectivelabs/sdk-ts'
 import { config } from "state/config";
-import { BigNumber } from "@injectivelabs/utils"
-const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getState }) => {
+import { BigNumberInBase } from '@injectivelabs/utils'
+
+const topupStream = createAsyncThunk("stream/topup", async (payload, { getState }) => {
     let state = await getState();
 
     try {
@@ -16,18 +17,19 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
             walletStrategy: keplrObj,
             network: InjNetwork,
         })
+
         const msg = MsgExecuteContract.fromJSON({
             funds: {
-                denom: 'inj',
-                amount: new BigNumber(1).toFixed()
+                denom: payload.tokenId,
+                amount: new BigNumberInBase(payload.amount).toWei(payload.tokenDecimal).toFixed()
             },
             sender: injectiveAddress,
             contractAddress: config.inj.contractAddress,
             exec: {
                 msg: {
-                    cancel_id: streamId
+                    topup_id: payload.streamId
                 },
-                action: "cancel"
+                action: "topup"
             }
         });
         await msgBroadcastClient.broadcast({
@@ -37,7 +39,7 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
         return {
             result: true,
             type: "stream",
-            message: "Cancel stream success",
+            message: "Withdraw stream success",
             fieldErr: ""
         }
     } catch (e) {
@@ -45,10 +47,11 @@ const cancelStream = createAsyncThunk("stream/cancel", async (streamId, { getSta
         let errMsg = e.message.length > 100 ? e.message.slice(0, 100) + "..." + " (See detail in console)" : e.message;
         return {
             result: false,
-            type: "cancel",
+            type: "withdraw",
             message: errMsg,
             fieldErr: ""
         }
     }
+
 })
-export default cancelStream;
+export default topupStream;

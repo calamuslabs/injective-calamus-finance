@@ -1,6 +1,4 @@
 import { useState, useCallback, useEffect } from "react";
-
-import { setIsCancelling, setIsTransferring, setIsWithdrawing } from "state/stream/slice";
 import {
     Icon,
     Menu,
@@ -29,6 +27,8 @@ import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import withdrawStream from "state/stream/thunk/withdraw";
 import cancelStream from "state/stream/thunk/cancel";
+import topupStream from "state/stream/thunk/topup";
+import transferStream from "state/stream/thunk/transfer";
 export default function StreamAction({ account, stream, isIncoming }) {
     const dispatch = useDispatch();
     const router = useRouter()
@@ -60,11 +60,9 @@ export default function StreamAction({ account, stream, isIncoming }) {
     const handleCancel = useCallback(
         async () => {
             try {
-                dispatch(setIsCancelling(true));
                 dispatch(cancelStream(stream.streamId));
             } catch (e) {
                 console.log("Cancel stream Error:", e);
-                dispatch(setIsCancelling(false))
             }
 
         },
@@ -74,11 +72,9 @@ export default function StreamAction({ account, stream, isIncoming }) {
     const handleWithdraw = useCallback(
         async () => {
             try {
-                dispatch(setIsWithdrawing(true));
                 dispatch(withdrawStream(stream.streamId));
             } catch (e) {
                 console.log("Withdraw stream Error:", e);
-                dispatch(setIsWithdrawing(false))
             }
         },
         [stream.streamId]
@@ -87,7 +83,7 @@ export default function StreamAction({ account, stream, isIncoming }) {
     const handleChangeRecipient = useCallback(async (e) => {
         const value = e.target.value;
         setNewRecipient(value);
-        if (value.toLowerCase() == stream.sender.toLowerCase() || value.toLowerCase() == stream.recipient.toLowerCase()) {
+        if (value == stream.sender || value == stream.recipient) {
             setRecipientErr("Address must be different from sender/recipient");
         } else if (value == "") {
             setRecipientErr("Address must not empty");
@@ -98,15 +94,9 @@ export default function StreamAction({ account, stream, isIncoming }) {
 
     const handleTransfer = useCallback(async () => {
         try {
-            dispatch(setIsTransferring(true));
-            if (stream.chain === "tron") {
-                await dispatch(transferTronStream({ stream: stream, newRecipient: newRecipient }));
-            } else if (isSupportedEVMChain(stream.chain)) {
-                await dispatch(transferEVMStream({ stream: stream, newRecipient: newRecipient }));
-            }
+            dispatch(transferStream({ streamId: stream.streamId, newRecipient: newRecipient }));
         } catch (e) {
             console.log("Transfer stream Error:", e);
-            dispatch(setIsTransferring(false));
         }
 
     }, [newRecipient])
@@ -114,13 +104,10 @@ export default function StreamAction({ account, stream, isIncoming }) {
     const handleTopup = useCallback(
         async () => {
             try {
-                dispatch(setIsTopuping(true));
-                await dispatch(topupEVMStream({ stream: stream, amount: ethers.utils.parseUnits(topupAmount, stream.tokenDecimal) }));
+                dispatch(topupStream({ streamId: stream.streamId, amount: topupAmount, tokenDecimal: stream.tokenDetail.decimals, tokenId: stream.tokenDetail.denom }));
             } catch (e) {
                 console.log("Withdraw stream Error:", e);
-                dispatch(setIsTopuping(false))
             }
-
         },
         [topupAmount]
     );
@@ -130,7 +117,7 @@ export default function StreamAction({ account, stream, isIncoming }) {
         let stopTime = parseInt(stream.stopTime);
         setDisableCancel(stream.originStatus !== 1 || !(account === stream.sender));
         setDisableTransfer(stream.originStatus !== 1 || !(account === stream.recipient));
-        setDisableWithdraw(stream.recipient !== account);
+        setDisableWithdraw(stream.recipient !== account || stream.originStatus === 3);
         setDisableTopup(stream.originStatus !== 1 || (stopTime < currentTime) || !(account === stream.sender));
     }, [stream, recipientErr, newRecipient]);
 
@@ -148,7 +135,7 @@ export default function StreamAction({ account, stream, isIncoming }) {
             computePositionOnMount={true}>
             <MenuButton><Icon as={FiMoreHorizontal} /></MenuButton>
             <MenuList sx={actionOptionsContainerStyle}>
-                {/* <Button
+                <Button
                     sx={actionButtonStyle}
                     isDisabled={disableTransfer}
                     variant={'ghost'}
@@ -158,14 +145,16 @@ export default function StreamAction({ account, stream, isIncoming }) {
                 </Button>
                 <Collapse in={isOpenTransfer} animateOpacity>
                     <VStack sx={actionOptionsContainerStyle}>
-                        <Input size={'sm'} placeholder={'Recipient address'} value={newRecipient}
-                            onChange={handleChangeRecipient} />
-                        {recipientErr ? <Text color={'red'} sx={errorTextStyle}>{recipientErr}</Text> : null}
+                        <FormControl isInvalid={recipientErr !== ""}>
+                            <Input size={'sm'} placeholder={'Recipient address'} value={newRecipient}
+                                onChange={handleChangeRecipient} />
+                            <FormErrorMessage>{recipientErr}</FormErrorMessage>
+                        </FormControl>
                         <Button sx={withdrawActionButtonStyle} size={'sm'} isDisabled={disableTransfer || isTransferring}
                             isLoading={isTransferring} onClick={handleTransfer}>Transfer</Button>
                     </VStack>
                 </Collapse>
-                <MenuDivider /> */}
+                <MenuDivider />
 
                 <Button
                     sx={actionButtonStyle}
@@ -177,7 +166,7 @@ export default function StreamAction({ account, stream, isIncoming }) {
                     Withdraw
                 </Button>
                 <MenuDivider />
-                {/* <Box>
+                <Box>
                     <Button
                         sx={actionButtonStyle}
                         isDisabled={disableTopup}
@@ -202,7 +191,7 @@ export default function StreamAction({ account, stream, isIncoming }) {
                         </VStack>
                     </Collapse>
                     <MenuDivider />
-                </Box> */}
+                </Box>
                 <Button
                     sx={actionButtonStyle}
                     isDisabled={disableCancel}

@@ -4,7 +4,7 @@ import { MsgBroadcaster } from '@injectivelabs/wallet-ts'
 import {
     MsgExecuteContract
 } from '@injectivelabs/sdk-ts'
-import { BigNumberInBase } from '@injectivelabs/utils'
+import { BigNumberInBase, BigNumber } from '@injectivelabs/utils'
 import { config } from "state/config";
 
 const createStream = createAsyncThunk("stream/create", async (_payload, { getState }) => {
@@ -41,8 +41,8 @@ const createStream = createAsyncThunk("stream/create", async (_payload, { getSta
             exec: {
                 msg: {
                     recipient: formData.recipient,
-                    start_time: parseInt(formData.start_time) / 1000,
-                    duration: parseInt(formData.stop_time) / 1000 - parseInt(formData.start_time) / 1000,
+                    start_time:  new BigNumber(parseInt(formData.start_time) / 1000),
+                    duration: new BigNumber(parseInt(formData.stop_time) / 1000 - parseInt(formData.start_time) / 1000),
                     vesting_release: new BigNumberInBase(formData.vesting_release).toWei(2).toFixed()
                 },
                 action: "create"
