@@ -7,7 +7,7 @@ import {store, persistor} from 'state/store';
 import DefaultSkeletonPage from "components/layout/DefaultSkeletonPage";
 import Layout from "components/layout/Layout";
 import Theme from 'styles/Theme'
-
+import Head from 'next/head';
 function MyApp({ Component, pageProps }) {
     const Router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +27,10 @@ function MyApp({ Component, pageProps }) {
     const pageMarkup = isLoading ? loadingPageMarkup : actualPageMarkup;
 
     return (
+        <React.Fragment>
+        <Head>
+            <title>Calamus on Injective</title>
+        </Head>
         <ChakraProvider theme={Theme}>
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
@@ -37,6 +41,7 @@ function MyApp({ Component, pageProps }) {
                 </PersistGate>
             </Provider>
         </ChakraProvider>
+        </React.Fragment>
     )
 }
 
