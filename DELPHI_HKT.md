@@ -68,14 +68,11 @@ Our main smart contract is [here](https://testnet.explorer.injective.network/con
 
 ## Challenges we ran into
 
-Although the tech stack used inTRON is relatively basic for a Web3 developer, we encountered multiple technical problems which take quite some time to solve:
+we encountered multiple technical problems which take quite some time to solve:
 
-- **Issue 1: Some OpenZeppelin's contracts had errors when compiled with TronBox.** Thus, we had to customize the contracts by OpenZeppelin.
-- **Issue 2: TronBox cannot deploy contracts.** We chose TronIDE and Tronscan to replace TronBox in deploying.
-- **Issue 3: Interacting with the wallet on Frontend.** Some examples and sample codes do not run correctly, are hard to set up and use obsolete, incompatible libraries. Luckily, the team can still connect to the wallet by customizing these examples based on TronWeb's document.
-- **Issue 4: Smart Contracts failure.** Some Smart Contracts, which can deploy on Ethereum Testnet, can fail on TVM due to various reasons, some of which relate to data type or using an external library.
-
-
+- **Issue 1: The absence of documentation** and the lack of source code examples to build a complete dApp on Injective have been challenging. Additionally, the sdk-ts is outdated, resulting in errors when signing transactions, such as the "funds" variable in MsgExecuteContract, which is not necessary but still generates an error. We addressed this issue by adding one Injective wei for each standard transaction.
+- **Issue 2: The size of the Injective ecosystem**, developer tools, and JS libraries is quite extensive, making it difficult to learn everything in the duration of a hackathon. Additionally, CosmWasm is more complicated than other smart contract development languages, requiring us to invest both official and spare time on weekends to write code.
+- **Issue 3:**
 ## Accomplishments that we're proud of
 
 - Build a Money Streaming protocol on a new platform.
