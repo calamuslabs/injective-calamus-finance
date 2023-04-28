@@ -1,4 +1,4 @@
-import { ethers, BigNumber } from 'ethers';
+import { BigNumberInWei } from '@injectivelabs/utils'
 export const convertStreams = async (denomClient, streams) => {
     try {
         let convertedStreams = [];
@@ -51,14 +51,12 @@ export const convertStreams = async (denomClient, streams) => {
             }
             let tokenDetail = tokenKeyMap.get(stream.release_amount.denom);
             let decimal =  tokenDetail.decimals;
-            let convertedReleaseAmount = parseFloat(ethers.utils.formatUnits(BigNumber.from(stream.release_amount.amount), decimal));
-            let convertedRemainingAmount = parseFloat(ethers.utils.formatUnits(BigNumber.from(stream.remaining_amount, decimal)));
-            let convertedVestingAmount = parseFloat(ethers.utils.formatUnits(BigNumber.from(stream.vesting_amount, decimal)));
-
+            let convertedReleaseAmount = parseFloat(new BigNumberInWei(stream.release_amount.amount).toBase(decimal).toFixed());
+            let convertedRemainingAmount = parseFloat(new BigNumberInWei(stream.remaining_amount).toBase(decimal).toFixed());
+            let convertedVestingAmount = parseFloat(new BigNumberInWei(stream.vesting_amount).toBase(decimal).toFixed());
             let releaseRate = convertedReleaseAmount / (stopTime - startTime)
             convertedReleaseAmount += convertedVestingAmount;
             let convertedWithdrawAmount = convertedReleaseAmount - convertedRemainingAmount;
-
             let streamId = parseInt(stream.id);
             let releaseRateDisplay = `${releaseRate.toFixed(4)} / second`;
             let convertedStream = {
