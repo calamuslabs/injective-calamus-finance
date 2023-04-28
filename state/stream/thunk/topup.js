@@ -39,7 +39,7 @@ const topupStream = createAsyncThunk("stream/topup", async (payload, { getState 
         return {
             result: true,
             type: "stream",
-            message: "Withdraw stream success",
+            message: "Topup stream success",
             fieldErr: ""
         }
     } catch (e) {

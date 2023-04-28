@@ -40,7 +40,7 @@ const transferStream = createAsyncThunk("stream/transfer", async (payload, { get
         return {
             result: true,
             type: "stream",
-            message: "Withdraw stream success",
+            message: "Transfer stream success",
             fieldErr: ""
         }
     } catch (e) {
