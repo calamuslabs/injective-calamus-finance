@@ -107,4 +107,4 @@ Our main smart contract is [here](https://testnet.explorer.injective.network/con
 - Run command: `cargo test`
 # License
 
-Copyright © 2023 Shopify. See [LICENSE](LICENSE.md) for further details.
+Copyright © 2023 Calamus Finance. See [LICENSE](LICENSE.md) for further details.
