@@ -27,7 +27,7 @@ Prior to beginning, it is necessary to install [Rust](https://www.rust-lang.org/
   - `injectived keys add`
   - `injectived keys import`
 
-### Deployment
+#### Deployment
 
 - CD to contract folder: `cd contracts/`
 - Compile contract
