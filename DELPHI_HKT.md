@@ -34,7 +34,7 @@ Users can:
 Data from these features are validated at DApp and Smart Contract, hence minimizing human risk and improving security.
 
 ## How we built it
-#### Technologies
+### Technologies
 - **CosmWasm**: To develop smart contracts
 - InjectiveLabs SDK
 - InjectiveLabs Wallet API
@@ -43,25 +43,25 @@ Data from these features are validated at DApp and Smart Contract, hence minimiz
 - Charka UI components
 - React 17 & React-Redux
 
-#### Smart contract
+### Smart contract
 
 Our main smart contract is [here](https://testnet.explorer.injective.network/contract/inj1tna3283sjqd4vdehglz9r8hgswel3jl6vx8q4a/?tab=transactions)
 
 #### Workflows
-### Create stream process
+#### Create stream process
 ![](https://github.com/calamuslabs/injective-calamus-finance/blob/c33395360a9577a4e9a66e075b11a552498bf5e5/docs/CreateStream.jpg)
 
-### Withdraw token process
+#### Withdraw token process
 
 ![](https://github.com/calamuslabs/injective-calamus-finance/blob/c33395360a9577a4e9a66e075b11a552498bf5e5/docs/WithdrawProccess.jpg)
 
-### Top-up stream process
+#### Top-up stream process
 ![](https://github.com/calamuslabs/injective-calamus-finance/blob/c33395360a9577a4e9a66e075b11a552498bf5e5/docs/TopupProcess.jpg)
 
-### Cancel stream process
+#### Cancel stream process
 ![](https://github.com/calamuslabs/injective-calamus-finance/blob/c33395360a9577a4e9a66e075b11a552498bf5e5/docs/CancelProcess.jpg)
 
-### Transfer stream process
+#### Transfer stream process
 ![](https://github.com/calamuslabs/injective-calamus-finance/blob/c33395360a9577a4e9a66e075b11a552498bf5e5/docs/TransferProcess.jpg)
 
 
@@ -91,7 +91,7 @@ Throughout the journey, we have learned to
 - General knowledge of libraries and APIs in various languages.
 - Technical knowledge on how to solve existing problems of fiat payment systems.
 
-## What's next for Calamus Finance - Money Streaming on TRON
+## What's next for Calamus Finance - Money Streaming on Injective
 
 - Enable Interchain Transfer using IBC message.
 - Support batch instance payment
