@@ -72,7 +72,9 @@ we encountered multiple technical problems which take quite some time to solve:
 
 - **Issue 1: The absence of documentation** and the lack of source code examples to build a complete dApp on Injective have been challenging. Additionally, the sdk-ts is outdated, resulting in errors when signing transactions, such as the "funds" variable in MsgExecuteContract, which is not necessary but still generates an error. We addressed this issue by adding one Injective wei for each standard transaction.
 - **Issue 2: The size of the Injective ecosystem**, developer tools, and JS libraries is quite extensive, making it difficult to learn everything in the duration of a hackathon. Additionally, CosmWasm is more complicated than other smart contract development languages, requiring us to invest both official and spare time on weekends to write code.
-- **Issue 3:**
+- **Issue 3: Interchain Stream**
+  - Our initial idea was to enable anyone using Cosmos chains to create a stream and withdraw tokens based on our smart contract on Injective. However, this idea has faced technical challenges. In CosmWasm, the IBCMsg was separated into three enums (Transfer, SendPacket, CloseChannel), and the "ibc_packet_receive" function only receives data of SendPacket. There is no way to perform both Transfer and SendPacket at once, and as a result, we have not been able to find a solution to this issue.
+  - We attempted to create a stream-based smart contract on Injective to transfer tokens to other Cosmos chains. While this idea is feasible, each chain has a different frontend SDK or library, and we did not have enough time to implement all of them. It would be better if every frontend SDK implemented a standard for Cosmos Chain frontend SDKs.
 ## Accomplishments that we're proud of
 
 - Build a Money Streaming protocol on a new platform.
